@@ -1,0 +1,6 @@
+15:28:59 **** Incremental Build of configuration Debug for project M3_Drivers ****
+make -j4 all 
+make: Nothing to be done for 'all'.
+
+15:28:59 Build Finished. 0 errors, 0 warnings. (took 299ms)
+

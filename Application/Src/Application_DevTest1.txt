@@ -1,0 +1,414 @@
+//==============================================================================
+/**
+ * @file Application.cpp
+ * @title Application template for EDROS Framework M3
+ * @author Joao Nilo Rodrigues  -  nilo@pobox.com
+ */
+//------------------------------------------------------------------------------
+#include <Application.h>
+#include "NLed.h"
+#include "NSwitch.h"
+#include "NMco.h"
+#include "NHardwareTimer.h"
+#include "NSerial.h"
+#include "NSpi.h"
+#include "NAdc.h"
+#include "NIic.h"
+
+NTinyOutput* Pin_Test;
+NTinyOutput* Pin_Test2;
+
+NTimer* Timer1;
+//NInput* Button_L;
+//NInput* Button_R;
+
+NLed* Led_Red;
+NLed* Led_Green;
+NLed* Led_BluePill;
+
+NSwitch* Button_L;
+NSwitch* Button_R;
+NSerial* ServicePort;
+NMco* ClockOut;
+NSpi* Spi1;
+NTinyOutput* Spi1_CS;
+NInput* ADXL345_INT1;
+
+NHardwareTimer* HardTimer1;
+NHardwareTimer* HardTimer2;
+
+NAdc* Analogs;
+
+#define AT24C256_WRITE		0xA0	// 1010 000 0
+#define AT24C256_READ		0xA1	// 1010 000 1
+
+#define MAX30100_WRITE		0xAE	// 1010 111 0
+#define MAX30100_READ		0xAF	// 1010 111 1
+
+#define ADXL345_WRITE		0x3A
+#define ADXL345_READ		0x3B
+
+#define AS5600_WRITE		0x6C	// 0110 110 0
+#define AS5600_READ			0x6D	// 0110 110 1
+
+NIic* Sensor1;
+
+volatile uint8_t buffer8[11];
+volatile uint16_t buffer16[11];
+
+#define SAMPLE_BUFFER_SIZE 120
+volatile uint16_t samples[SAMPLE_BUFFER_SIZE];
+
+void Timer1_OnTimer();
+void Button_L_OnFallingEdge();
+void Button_R_OnFallingEdge();
+void Button_L_OnPress();
+void Button_R_OnPress();
+void Service_OnPacket(uint8_t* data, uint8_t size);
+void Service_OnTimeout();
+void HardTimer1_OnTimer();
+void HardTimer2_OnTimer();
+void Spi1_OnWriteCompleted();
+void Spi1_OnReadCompleted();
+void Analogs_OnData(uint16_t);
+void Analogs_OnDataBlock(uint16_t*, uint16_t);
+void Analogs_OnUpperThreshold(uint16_t);
+void Analogs_OnLowerThreshold(uint16_t);
+
+//------------------------------------------------------------------------------
+uint8_t As5600_Read(uint8_t regAddr){
+	uint8_t result = 0;
+	Sensor1->Start();
+	if(Sensor1->Address(AS5600_WRITE)){
+		if(Sensor1->Write(regAddr)){
+			Sensor1->Start();
+			Sensor1->Read(AS5600_READ, &result, 1);
+		}
+	}
+	Sensor1->Stop();
+	return(result);
+}
+
+//------------------------------------------------------------------------------
+void As5600_Read(uint8_t regAddr, uint8_t* ptBuf, uint8_t n){
+	Sensor1->Start();
+	if(Sensor1->Address(AS5600_WRITE)){
+		if(Sensor1->Write(regAddr)){
+			Sensor1->Start();
+			Sensor1->Read(AS5600_READ, ptBuf, n);
+		}
+	}
+	Sensor1->Stop();
+}
+
+//------------------------------------------------------------------------------
+void As5600_Write(uint8_t regAddr, uint8_t regValue){
+	Sensor1->Start();
+	if(Sensor1->Address(AS5600_WRITE)){
+		if(Sensor1->Write(regAddr)){
+			Sensor1->Write(regAddr);
+		}
+	}
+	Sensor1->Stop();
+}
+
+
+//------------------------------------------------------------------------------
+void As5600_Write(uint8_t regInitialAddr, uint8_t* ptBuf, uint8_t szBuf){
+	Sensor1->Start();
+	if(Sensor1->Address(AS5600_WRITE)){
+		if(Sensor1->Write(regInitialAddr)){
+			Sensor1->Write(ptBuf, szBuf);
+		}
+	}
+	Sensor1->Stop();
+}
+
+//------------------------------------------------------------------------------
+void Adxl345_Write(uint8_t regInitialAddr, uint8_t* ptBuf, uint8_t szBuf){
+	Sensor1->Start();
+	if(Sensor1->Address(ADXL345_WRITE)){
+		if(Sensor1->Write(regInitialAddr)){
+			Sensor1->Write(ptBuf, szBuf);
+		}
+	}
+	Sensor1->Stop();
+}
+
+//------------------------------------------------------------------------------
+void Max30100_Write(uint8_t regInitialAddr, uint8_t* ptBuf, uint8_t szBuf){
+	Sensor1->Start();
+	if(Sensor1->Address(MAX30100_WRITE)){
+		if(Sensor1->Write(regInitialAddr)){
+			Sensor1->Write(ptBuf, szBuf);
+		}
+	}
+	Sensor1->Stop();
+}
+
+//------------------------------------------------------------------------------
+void At24c256_Write(uint16_t memInitialAddr, uint8_t* ptBuf, uint8_t szBuf){
+	Sensor1->Start();
+	if(Sensor1->Address(AT24C256_WRITE)){
+		if(Sensor1->Write(memInitialAddr>>8)){
+			if(Sensor1->Write(memInitialAddr&0xFF)){
+					Sensor1->Write(ptBuf, szBuf);
+			}
+		}
+	}
+	Sensor1->Stop();
+}
+
+//------------------------------------------------------------------------------
+void At24c256_Read(uint16_t memInitialAddr, uint8_t* ptBuf, uint8_t szBuf){
+	Sensor1->Start();
+	if(Sensor1->Address(AT24C256_WRITE)){
+		if(Sensor1->Write(memInitialAddr>>8)){
+			if(Sensor1->Write(memInitialAddr&0xFF)){
+				Sensor1->Start();
+				Sensor1->Read(AT24C256_READ, ptBuf, szBuf);
+			}
+		}
+	}
+	Sensor1->Stop();
+}
+
+//------------------------------------------------------------------------------
+void ApplicationCreate(){
+
+ 	Timer1 = new NTimer();
+	Timer1->OnTimer = Timer1_OnTimer;
+	//Timer1->Start(1000);
+
+	Led_Red = new NLed(GPIOB, 12);
+	Led_Red->Interval = 20;
+
+	Led_Green = new NLed(GPIOB, 13);
+
+	Led_BluePill = new NLed(GPIOC, 13);
+	Led_BluePill->Status = ldBlinking;
+
+	Pin_Test = new NTinyOutput(GPIOA, 9);
+	Pin_Test2 = new NTinyOutput(GPIOB, 0);
+
+	//Button_L = new NInput(GPIOA, 2);
+	//Button_L->Bias = inPullUp;
+	//Button_L->Edge = inFallingEdge;
+	//Button_L->OnFallingEdge = Button_L_OnFallingEdge;
+
+	Button_L = new NSwitch(GPIOB, 1);
+	Button_L->Mode = swButton;
+	Button_L->Inverted = true;
+	Button_L->OnPress = Button_L_OnPress;
+
+	Button_R = new NSwitch(GPIOB, 15);
+	//Button_R->Access = inInterrupt;
+	//Button_R->Bias = inPullUp;
+	//Button_R->Edge = inFallingEdge;
+	Button_R->Mode = swButton;
+	Button_R->Inverted = true;
+	Button_R->Debouncing = swLong;
+
+	Button_R->OnPress = Button_R_OnPress;
+
+	//Button_R->OnFallingEdge = Button_R_OnFallingEdge;
+
+	/*
+    ServicePort = new NSerial(USART1, seStandard); // Tx: PA9 Rx: PA10
+    //ServicePort->RxMode = seNoDMA;
+    //ServicePort->TxMode = seNoDMA;
+    ServicePort->PacketSize = 10;
+    ServicePort->Timeout = 50;
+    ServicePort->OnPacket = Service_OnPacket;
+    ServicePort->OnTimeout = Service_OnTimeout;
+    ServicePort->Open();
+    */
+
+    ClockOut = new NMco(mcoStandard);
+    ClockOut->Source = mcoSysClk;
+    ClockOut->Enabled = true;
+
+    /*
+    HardTimer1 = new NHardwareTimer(TIM2);
+    HardTimer1->OnTimer = HardTimer1_OnTimer;
+    HardTimer1->IrqPriority = htPriorityLevel2;
+    HardTimer1->Start(21);
+    */
+
+    /*
+    HardTimer2 = new NHardwareTimer(TIM3);
+    HardTimer2->OnTimer = HardTimer2_OnTimer;
+    HardTimer2->IrqPriority = htPriorityLevel3;
+    HardTimer2->Start(22);
+    */
+
+    Spi1_CS = new NTinyOutput(GPIOC, 15);
+    Spi1_CS->Level = toHigh;
+    Spi1 = new NSpi(SPI1, spStandard);
+    Spi1->OnWriteCompleted = Spi1_OnWriteCompleted;
+    Spi1->OnReadCompleted = Spi1_OnReadCompleted;
+    Spi1->ModeTx = spNoDMA;
+    Spi1->ModeRx = spNoDMA;
+    Spi1->ClockPolarity = sp_CPol0_CPha0;
+    Spi1->Blocking = false;
+    Spi1->ClockRate = spPCLK_Div8;
+   // Spi1->Open();	// turn-on peripheral clock
+
+    Analogs = new NAdc(ADC1);
+    Analogs->AddChannel(adCH0);
+    Analogs->AddChannel(adCH1);
+    //Analogs->AddChannel(adCH2);
+
+    //Analogs->Mode = adContinuous1;
+    //Analogs->Mode = adContinuous2;
+    //Analogs->OnData = Analogs_OnData;
+
+    Analogs->Mode = adContinuous3;
+    Analogs->SetDataBuffer((uint16_t*)samples, SAMPLE_BUFFER_SIZE);
+    Analogs->OnDataBlock = Analogs_OnDataBlock;
+
+    //Analogs->Start(500);
+
+    for(int c=1; c<10; c++){ buffer8[c-1]=c;}
+    Sensor1 = new NIic(I2C1, iiStandard);
+    Sensor1->ClockRate = ii400kHz;
+    //Sensor1->EnableDMA = true;
+    Sensor1->Open();
+
+    //CPU_InitializeWatchdog(100);
+}
+
+//------------------------------------------------------------------------------
+void Timer1_OnTimer(){
+	//Analogs->Start();
+
+	//Adxl345_Write(0x1E, (uint8_t*)buffer8, 3);
+	//Max30100_Write(0x0A, (uint8_t*)buffer8, 2);
+	//As5600_Write(0x01, (uint8_t*)buffer8, 10);
+
+	for(int c=0; c< 10; c++) buffer8[c]=c;
+
+	At24c256_Write(0, (uint8_t*)buffer8, 10);
+	//At24c256_Read(0, (uint8_t*)buffer8, 10);
+
+
+
+	//As5600_Read(0x00, (uint8_t*)buffer8, 9);
+	if(buffer8[0] == 0x13){
+		Led_Red->Toggle();
+	}
+}
+
+//------------------------------------------------------------------------------
+void Analogs_OnData(uint16_t new_sample){
+	Pin_Test->Toggle();
+}
+
+//------------------------------------------------------------------------------
+void Analogs_OnDataBlock(uint16_t* data, uint16_t size){
+	if(data[1] < 1024){ Led_Red->Status = ldOff;}
+	else if(data[1] > 2048){ Led_Red->Status = ldBlinking;}
+	else { Led_Red->Status = ldOn;}
+	Pin_Test->Toggle();
+}
+
+//------------------------------------------------------------------------------
+void Analogs_OnUpperThreshold(uint16_t){}
+//------------------------------------------------------------------------------
+void Analogs_OnLowerThreshold(uint16_t){}
+
+//------------------------------------------------------------------------------
+void HardTimer1_OnTimer(){
+	//Pin_Test->Toggle();
+}
+
+//------------------------------------------------------------------------------
+void HardTimer2_OnTimer(){
+	//Pin_Test2->Toggle();
+}
+
+//------------------------------------------------------------------------------
+void Button_R_OnPress(){
+	Led_Red->Interval = 25;
+	Led_Red->Burst = 10;
+}
+
+//------------------------------------------------------------------------------
+void Button_L_OnPress(){
+	for(int i=0; i< 11; i++){
+	    buffer8[i]= 0x00 + i;
+	    buffer16[i] = 0x0001<<i;
+	}
+
+
+	//Spi1_CS->Level = toLow;
+
+	//-------- TESTE DE ESCRITA ---------
+	//Spi1->Blocking = true;
+    //Spi1->ModeTx = spNoDMA;
+    //if(Spi1->Blocking){ Spi1->OnWriteCompleted = NULL;}
+
+	//Spi1->Write((uint8_t*)buffer8, 10);
+	//Spi1->Write((uint16_t*)buffer16, 10);
+
+    //------ TESTE DE LEITURA -----------
+	/*Spi1->Blocking = true;
+    Spi1->ModeTx = spNoDMA;
+	if(Spi1->Blocking){ Spi1->OnWriteCompleted = NULL;}
+
+	buffer8[0] = 0x0D;
+	Spi1->Write((uint8_t*)buffer8, 1);
+
+	Spi1->Blocking = false;
+    Spi1->ModeRx = spDMA;
+	if(Spi1->Blocking){ Spi1->OnWriteCompleted = NULL;}
+
+	Spi1->Read((uint8_t*)(buffer8+1), 10);
+	//Spi1->Read((uint16_t*)buffer16, 5);*/
+
+	//if(Spi1->Blocking){ Spi1_CS->Level = toHigh;}
+
+	Led_Green->Interval = 1000;
+	Led_Green->Burst = 2;
+}
+
+//------------------------------------------------------------------------------
+void Spi1_OnWriteCompleted(){
+	//Spi1_CS->Level = toHigh;
+
+}
+
+//------------------------------------------------------------------------------
+void Spi1_OnReadCompleted(){
+	//Spi1_CS->Level = toHigh;
+}
+
+
+//------------------------------------------------------------------------------
+/** Service port received a new packet of data
+* @param data is a pointer to the received packet
+* @param size is the number of bytes in the packet
+*/
+void Service_OnPacket(uint8_t* data, uint8_t size){
+    Led_Green->Burst = 3;
+    //ServicePort->Write(data, size);
+}
+
+//------------------------------------------------------------------------------
+void Service_OnTimeout(){
+	Led_Green->Interval = 50;
+	Led_Green->Burst = 3;
+}
+
+//------------------------------------------------------------------------------
+void Button_L_OnFallingEdge(){
+	Led_Green->Toggle();
+}
+
+//------------------------------------------------------------------------------
+void Button_R_OnFallingEdge(){
+	Led_Green->Toggle();
+	//Spi1_CS->Level = toHigh;
+}
+
+//==============================================================================

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item key="selection" value="ServoPower"/>
+		<item key="casesensitive" value="false"/>
+		<item key="wholeword" value="false"/>
+		<item key="isRegEx" value="false"/>
+		<list key="findhistory">
+			<item value="ServoPower"/>
+			<item value="Digit_OnValueUpdate"/>
+			<item value="Delay"/>
+			<item value="previous_g"/>
+			<item value="G_Clear"/>
+			<item value="next_state"/>
+			<item value=" ServoPower-&gt;Level"/>
+			<item value="duty"/>
+		</list>
+		<list key="replacehistory">
+		</list>
+	</section>
+</section>

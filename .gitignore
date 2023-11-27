@@ -1,0 +1,10 @@
+# Igonorar as pastas abaixo
+/Application/Debug
+/Application/Docs
+/M3_Dependencies
+/M3_Drivers
+/M3_Internals
+/M3_Kernel
+/M3_Peripherals
+/M3_Prosa
+!/.metadata/
