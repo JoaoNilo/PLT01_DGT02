@@ -192,9 +192,14 @@
             property<FlipDisplay, bool, propReadWrite> Arrow;
 
             /**
-             * @brief This property is used to define the hardware output for servo power line.
+             * @brief This property is used to define the hardware output for horizontal segments servo power line.
              */
-            NTinyOutput* ServoPower;
+            NTinyOutput* Driver_H;
+
+            /**
+             * @brief This property is used to define the hardware output for vertical segments servo power line.
+             */
+            NTinyOutput* Driver_V;
 
             /**
              * @brief This property is used to define the hardware output for each segment.
