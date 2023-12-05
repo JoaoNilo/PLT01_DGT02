@@ -166,12 +166,12 @@ void FlipDisplay::RunStateMachine(){
 			break;
 
 		case fdServosOn:
-    		if(ServoPower != NULL) { ServoPower->Level = toHigh;}
+    		if(Driver_V != NULL) { Driver_V->Level = toHigh;}
     		fsm_counter = FSM_SERVOS_ON;
     		next_state = fdServos_Start_Clear; // next state
     		break;
 
-		// start moving the
+		// start moving the vertical segments
 		case fdServos_Start_Clear:
 			seg_B = segment[Seg_B]; seg_F = segment[Seg_F];
 			segment[Seg_B] = PPM_SEG_CLEAR;
@@ -183,6 +183,8 @@ void FlipDisplay::RunStateMachine(){
 
 		// start moving the horizontal segments
 		case fdServos_Start_H:
+			if(Driver_V != NULL) { Driver_V->Level = toLow;}
+			if(Driver_H != NULL) { Driver_H->Level = toHigh;}
 			segment[Seg_B] = seg_B;
 			segment[Seg_F] = seg_F;
 			group_to_move = SERVOS_HORIZONTAL;
@@ -198,6 +200,9 @@ void FlipDisplay::RunStateMachine(){
 
 		// start moving the vertical segments
 		case fdServos_Start_V:
+			if(Driver_H != NULL) { Driver_H->Level = toLow;}
+			if(Driver_V != NULL) { Driver_V->Level = toHigh;}
+
 			fsm_counter = FSM_SERVOS_MOVING_V;
 			//group_to_move = SERVOS_VERTICAL;
 			group_to_move = SERVOS_DIGIT;
@@ -206,6 +211,7 @@ void FlipDisplay::RunStateMachine(){
 
 		// finish vertical segments move
 		case fdServos_Stop_V:
+			if(Driver_V != NULL) { Driver_V->Level = toLow;}
 			previous = value;
 			fsm_counter = FSM_SERVOS_OFF;
 			if(Delay == 0){
@@ -217,13 +223,13 @@ void FlipDisplay::RunStateMachine(){
 
 		case fdServosOff:
 			Stop();
-			if(ServoPower != NULL){ ServoPower->Level = toLow;}
+			if(Driver_H != NULL){ Driver_H->Level = toLow;}
 			next_state = fdIdle;
 			if(OnValueUpdate != NULL){ OnValueUpdate();}
 			break;
 
 		case fdArrowOn:
-    		if(ServoPower != NULL) { ServoPower->Level = toHigh;}
+    		if(Driver_H != NULL) { Driver_H->Level = toHigh;}
     		fsm_counter = FSM_SERVOS_ON;
     		next_state = fdArrow_Move; // next state
     		break;
@@ -237,7 +243,7 @@ void FlipDisplay::RunStateMachine(){
 
 		case fdArrowOff:
 			Stop();
-			if(ServoPower != NULL){ ServoPower->Level = toLow;}
+			if(Driver_H != NULL){ Driver_H->Level = toLow;}
 			next_state = fdIdle;
 			break;
 
