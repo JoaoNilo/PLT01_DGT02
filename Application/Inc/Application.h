@@ -28,13 +28,15 @@
 #define MEM_PORT		I2C1
 #define TIMEBASE		TIM2
 
+
+#define LED				GPIOA, (uint32_t)1
+
 #define ADDR0			GPIOA, (uint32_t)3
 #define ADDR1			GPIOA, (uint32_t)4
 #define ADDR2			GPIOA, (uint32_t)5
 #define ADDR3			GPIOA, (uint32_t)6
 #define ADDR4			GPIOA, (uint32_t)7
 
-#define AMP				GPIOA, (uint32_t)8
 #define USART1_CTS		GPIOA,  (uint32_t)11
 #define USART1_RTS		GPIOA,  (uint32_t)12
 
@@ -47,8 +49,8 @@
 #define SEGMENT_G		GPIOB, (uint32_t)6
 #define SEGMENT_H		GPIOB, (uint32_t)7
 
-#define DRV				GPIOB, (uint32_t)14
-#define LED				GPIOB, (uint32_t)15
+#define DRV_VR			GPIOB, (uint32_t)12
+#define DRV_HR			GPIOC, (uint32_t)14
 
 //------------------------------------------------------------------------------
 #define FSM_IDLE		0
