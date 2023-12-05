@@ -46,7 +46,8 @@ NSerialCommand* busSetData;
 NSerialCommand* busSetServo;
 
 FlipDisplay* Digit;
-NTinyOutput* DigitPower;
+NTinyOutput* SegDrvH;
+NTinyOutput* SegDrvV;
 NTinyOutput* Segment_A;
 NTinyOutput* Segment_B;
 NTinyOutput* Segment_C;
@@ -185,7 +186,8 @@ void ApplicationCreate(){
     Timer1->OnTimer = Timer1_OnTimer;
     Timer1->Start(1000);
 
-    DigitPower = new NTinyOutput(DRV);
+    SegDrvH = new NTinyOutput(DRV_HR);
+    SegDrvV = new NTinyOutput(DRV_VR);
 
     // libera os pinos PB3 e PB4 (JTAG)
     AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_1;
@@ -199,7 +201,8 @@ void ApplicationCreate(){
     Segment_G  = new NTinyOutput(SEGMENT_G);
 
     Digit = new FlipDisplay(TIMEBASE);
-    Digit->ServoPower = DigitPower;
+    Digit->Driver_H = SegDrvH;
+    Digit->Driver_V = SegDrvV;
     Digit->Segment[0] = Segment_A;
     Digit->Segment[1] = Segment_B;
     Digit->Segment[2] = Segment_C;
@@ -394,3 +397,4 @@ void AddressResolution(){
 }
 
 //==============================================================================
+
