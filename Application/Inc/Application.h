@@ -29,7 +29,7 @@
 #define TIMEBASE		TIM2
 
 
-#define LED				GPIOA, (uint32_t)1
+#define LED				GPIOA, (uint32_t)2
 
 #define ADDR0			GPIOA, (uint32_t)3
 #define ADDR1			GPIOA, (uint32_t)4
@@ -59,19 +59,21 @@
 
 //------------------------------------------------------------------------------
 #define BUS_NODES		10
-#define PLAY1_TENS		((uint8_t) 0x1E)
-#define PLAY1_UNITS		((uint8_t) 0x1D)
-#define PLAY1_SET1		((uint8_t) 0x1C)
-#define PLAY1_SET2		((uint8_t) 0x1B)
-#define PLAY1_SET3		((uint8_t) 0x1A)
-#define PLAY2_TENS		((uint8_t) 0x19)
-#define PLAY2_UNITS		((uint8_t) 0x18)
-#define PLAY2_SET1		((uint8_t) 0x17)
-#define PLAY2_SET2		((uint8_t) 0x16)
-#define PLAY2_SET3		((uint8_t) 0x15)
-#define MATCH_SECONDS	((uint8_t) 0x14)
-#define MATCH_MINUTES	((uint8_t) 0x13)
-#define MATCH_HOURS		((uint8_t) 0x12)
+#define PLAY1_TENS		((uint8_t) 0x01)
+#define PLAY1_UNITS		((uint8_t) 0x02)
+#define PLAY1_SET1		((uint8_t) 0x03)
+#define PLAY1_SET2		((uint8_t) 0x04)
+#define PLAY1_SET3		((uint8_t) 0x05)
+
+#define PLAY2_TENS		((uint8_t) 0x0A)
+#define PLAY2_UNITS		((uint8_t) 0x09)
+#define PLAY2_SET1		((uint8_t) 0x08)
+#define PLAY2_SET2		((uint8_t) 0x07)
+#define PLAY2_SET3		((uint8_t) 0x06)
+
+#define MATCH_SECONDS	((uint8_t) 0x0D)
+#define MATCH_MINUTES	((uint8_t) 0x0C)
+#define MATCH_HOURS		((uint8_t) 0x0B)
 
 //------------------------------------------------------------------------------
 #define INDEX_PLAY1_TENS		((uint8_t) 0x00)
