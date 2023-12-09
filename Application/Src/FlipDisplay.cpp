@@ -133,10 +133,6 @@ bool FlipDisplay::ProcessEvent(){
 	return(true);
 }
 
-//------------------------------------------------------------------------------
-/*void FlipDisplay::InterruptCallBack(NMESSAGE* msg){
-	NHardwareTimer::InterruptCallBack(msg);
-}*/
 
 //------------------------------------------------------------------------------
 void FlipDisplay::Notify(NMESSAGE* msg){

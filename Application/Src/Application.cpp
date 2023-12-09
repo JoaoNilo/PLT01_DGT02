@@ -29,9 +29,7 @@ const uint8_t publishingDate[4]  	= {11,05,20,23};
 
 NLed* Led_Heartbeat;
 NTimer* Timer1;
-//NTinyOutput* PowerAmp;
-//NAdc* Analogs;
-//NFilter* Vbat;
+
 
 // Bus protocol components
 NSerial* BusPort;
@@ -117,8 +115,6 @@ void busGetVersion_OnProcess(NDatagram*);
 void busGetStatus_OnProcess(NDatagram*);
 void busSetData_OnProcess(NDatagram*);
 void busSetServo_OnProcess(NDatagram*);
-//void Digit_OnValueUpdate();
-//void Analogs_OnData(uint16_t);
 
 //------------------------------------------------------------------------------
 void AddressResolution();
@@ -129,14 +125,6 @@ void ApplicationCreate(){
  	Led_Heartbeat = new NLed(LED);
 	Led_Heartbeat->Interval = 250;
 	Led_Heartbeat->Status = ldBlinking;
-
-    /*Analogs = new NAdc(ADC1);
-    Analogs->AddChannel(adCH0);
-    Analogs->Mode = adContinuous1;
-    Analogs->OnData = Analogs_OnData;
-    Analogs->Start(1000);
-
-    Vbat = new NFilter(5);*/
 
     //--------------------------------------------------------------------------
     // Bus communication components
@@ -212,27 +200,13 @@ void ApplicationCreate(){
     Digit->Segment[6] = Segment_G;
 
     //------------------------------------------
-    // PROVISORIAMENTE ALTERADO
     AddressResolution();
-    //LocalIndex = INDEX_PLAY1_TENS;
-    //LocalIndex = INDEX_PLAY1_UNITS;
-    //LocalIndex = INDEX_PLAY1_SET1;
-    //LocalIndex = INDEX_PLAY1_SET2;
-    //LocalIndex = INDEX_PLAY1_SET3;
-    //LocalIndex = INDEX_PLAY2_TENS;
-    //LocalIndex = INDEX_PLAY2_UNITS;
-    //LocalIndex = INDEX_PLAY2_SET1;
-    //LocalIndex = INDEX_PLAY2_SET2;
-    //LocalIndex = INDEX_PLAY2_SET3;
 
-    //LocalAddress = NodeAddresses[LocalIndex];
     //------------------------------------------
-
 
     if((LocalAddress == PLAY1_TENS)||(LocalAddress == PLAY2_TENS)){
     	Segment_H  = new NTinyOutput(SEGMENT_H);
     	Digit->Segment[Seg_H] = Segment_H;
-    	//Digit->OnValueUpdate = Digit_OnValueUpdate;
     }
 
     if(LocalIndex < BUS_NODES){
@@ -350,24 +324,6 @@ void busSetServo_OnProcess(NDatagram* iDt){
 	iDt->UpdateCrc();
 }
 
-//------------------------------------------------------------------------------
-/*void Digit_OnValueUpdate(){
-
-	if(LocalAddress == PLAY1_TENS){
-		if(ScoreParams[PARAMS_FLAGS] & PARAMS_FLAGS_SERV_PLAY1){ Digit->Arrow = true;}
-		else { Digit->Arrow = false;}
-	} else if(LocalAddress == PLAY2_TENS){
-		if(ScoreParams[PARAMS_FLAGS] & PARAMS_FLAGS_SERV_PLAY2){ Digit->Arrow = true;}
-		else { Digit->Arrow = false;}
-	}
-}*/
-
-//------------------------------------------------------------------------------
-/*void Analogs_OnData(uint16_t new_sample){
-	BatteryVoltage = Vbat->Filter(new_sample);
-}*/
-
-//------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 void AddressResolution(){
 	LocalAddress = 0;
