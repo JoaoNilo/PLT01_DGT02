@@ -1,6 +1,6 @@
-15:58:14 **** Incremental Build of configuration Debug for project M3_Peripherals ****
+17:07:46 **** Incremental Build of configuration Debug for project M3_Peripherals ****
 make -j4 all 
 make: Nothing to be done for 'all'.
 
-15:58:14 Build Finished. 0 errors, 0 warnings. (took 296ms)
+17:07:46 Build Finished. 0 errors, 0 warnings. (took 295ms)
 

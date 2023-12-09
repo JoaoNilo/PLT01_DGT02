@@ -1,12 +1,13 @@
-15:58:00 **** Incremental Build of configuration Debug for project M3_Drivers ****
+17:11:06 **** Incremental Build of configuration Debug for project M3_Drivers ****
 make -j4 all 
 make: Nothing to be done for 'all'.
-15:58:01 **** Incremental Build of configuration Debug for project M3_Drivers ****
+17:11:07 **** Incremental Build of configuration Debug for project M3_Drivers ****
 make -j4 all 
 make: Nothing to be done for 'all'.
-15:58:01 **** Incremental Build of configuration Debug for project Application ****
+17:11:07 **** Incremental Build of configuration Debug for project Application ****
 make -j4 all 
 arm-none-eabi-g++ "../Src/Application.cpp" -mcpu=cortex-m3 -std=gnu++14 -g3 -DDEBUG -DSTM32F103x6 -c -I../Inc -I"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Dependencies/STM32F1xx/Inc" -I"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Dependencies/CMSIS" -I"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Drivers/Inc" -I"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Internals/Inc" -I"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Kernel/Inc" -I"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Peripherals/Inc" -I"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Prosa/Inc" -Os -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/Application.d" -MT"Src/Application.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/Application.o"
+arm-none-eabi-g++ "../Src/FlipDisplay.cpp" -mcpu=cortex-m3 -std=gnu++14 -g3 -DDEBUG -DSTM32F103x6 -c -I../Inc -I"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Dependencies/STM32F1xx/Inc" -I"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Dependencies/CMSIS" -I"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Drivers/Inc" -I"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Internals/Inc" -I"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Kernel/Inc" -I"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Peripherals/Inc" -I"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Prosa/Inc" -Os -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/FlipDisplay.d" -MT"Src/FlipDisplay.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/FlipDisplay.o"
 arm-none-eabi-g++ -o "Application.elf" @"objects.list"  -lM3_Kernel -lM3_Dependencies -lM3_Drivers -lM3_Internals -lM3_Peripherals -lM3_Prosa -mcpu=cortex-m3 -T"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/Application/EDROS_F103_C6_FLASH.ld" --specs=nosys.specs -Wl,-Map="Application.map" -Wl,--gc-sections -static -L"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Dependencies/Debug" -L"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Drivers/Debug" -L"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Internals/Debug" -L"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Kernel/Debug" -L"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Peripherals/Debug" -L"/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-02/M3_Prosa/Debug" -Wl,--print-memory-usage -flto --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 /home/nilo/st/stm32cubeide_1.13.1/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.linux64_1.1.0.202305231506/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld: /home/nilo/st/stm32cubeide_1.13.1/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.linux64_1.1.0.202305231506/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc_nano.a(libc_a-closer.o): in function `_close_r':
 (.text._close_r+0xc): warning: _close is not implemented and will always fail
@@ -33,72 +34,4 @@ arm-none-eabi-objdump -h -S  Application.elf  > "Application.list"
 Finished building: default.size.stdout
  
 Finished building: Application.list
- 
-15:58:12 **** Incremental Build of configuration Debug for project M3_Dependencies ****
-make -j4 all 
-make: Nothing to be done for 'all'.
-15:58:12 **** Incremental Build of configuration Debug for project M3_Drivers ****
-make -j4 all 
-make: Nothing to be done for 'all'.
-15:58:13 **** Incremental Build of configuration Debug for project M3_Drivers ****
-make -j4 all 
-make: Nothing to be done for 'all'.
-15:58:13 **** Incremental Build of configuration Debug for project Application ****
-make -j4 all 
-arm-none-eabi-size   Application.elf 
-   text	   data	    bss	    dec	    hex	filename
-  26828	    176	   8168	  35172	   8964	Application.elf
-Finished building: default.size.stdout
- 
-15:58:13 **** Incremental Build of configuration Debug for project M3_Internals ****
-make -j4 all 
-make: Nothing to be done for 'all'.
-15:58:13 **** Incremental Build of configuration Debug for project M3_Kernel ****
-make -j4 all 
-make: Nothing to be done for 'all'.
-15:58:14 **** Incremental Build of configuration Debug for project M3_Peripherals ****
-make -j4 all 
-make: Nothing to be done for 'all'.
-15:58:14 **** Incremental Build of configuration Debug for project M3_Prosa ****
-make -j4 all 
-make: Nothing to be done for 'all'.
-15:58:17 **** Incremental Build of configuration Debug for project M3_Drivers ****
-make -j4 all 
-make: Nothing to be done for 'all'.
-15:58:17 **** Incremental Build of configuration Debug for project Application ****
-make -j4 all 
-arm-none-eabi-size   Application.elf 
-   text	   data	    bss	    dec	    hex	filename
-  26828	    176	   8168	  35172	   8964	Application.elf
-Finished building: default.size.stdout
- 
-16:29:51 **** Incremental Build of configuration Debug for project M3_Drivers ****
-make -j4 all 
-make: Nothing to be done for 'all'.
-16:29:51 **** Incremental Build of configuration Debug for project Application ****
-make -j4 all 
-arm-none-eabi-size   Application.elf 
-   text	   data	    bss	    dec	    hex	filename
-  26828	    176	   8168	  35172	   8964	Application.elf
-Finished building: default.size.stdout
- 
-16:32:48 **** Incremental Build of configuration Debug for project M3_Drivers ****
-make -j4 all 
-make: Nothing to be done for 'all'.
-16:32:49 **** Incremental Build of configuration Debug for project Application ****
-make -j4 all 
-arm-none-eabi-size   Application.elf 
-   text	   data	    bss	    dec	    hex	filename
-  26828	    176	   8168	  35172	   8964	Application.elf
-Finished building: default.size.stdout
- 
-16:40:35 **** Incremental Build of configuration Debug for project M3_Drivers ****
-make -j4 all 
-make: Nothing to be done for 'all'.
-16:40:35 **** Incremental Build of configuration Debug for project Application ****
-make -j4 all 
-arm-none-eabi-size   Application.elf 
-   text	   data	    bss	    dec	    hex	filename
-  26828	    176	   8168	  35172	   8964	Application.elf
-Finished building: default.size.stdout
  
