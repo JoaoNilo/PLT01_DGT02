@@ -19,4 +19,9 @@
 			<item value="/home/nilo/Documents/Projects/CubeIde/STM32F1xx/PLACAR/DGT-01_2023_04_19.zip"/>
 		</list>
 	</section>
+	<section name="org.eclipse.ui.preferences.keysPreferencePage">
+		<item key="actionSetFilter" value="true"/>
+		<item key="internalFilter" value="true"/>
+		<item key="uncategorizedFilter" value="true"/>
+	</section>
 </section>

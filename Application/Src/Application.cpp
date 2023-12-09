@@ -213,7 +213,7 @@ void ApplicationCreate(){
 
     //------------------------------------------
     // PROVISORIAMENTE ALTERADO
-    //AddressResolution();
+    AddressResolution();
     //LocalIndex = INDEX_PLAY1_TENS;
     //LocalIndex = INDEX_PLAY1_UNITS;
     //LocalIndex = INDEX_PLAY1_SET1;
@@ -222,10 +222,10 @@ void ApplicationCreate(){
     //LocalIndex = INDEX_PLAY2_TENS;
     //LocalIndex = INDEX_PLAY2_UNITS;
     //LocalIndex = INDEX_PLAY2_SET1;
-    LocalIndex = INDEX_PLAY2_SET2;
+    //LocalIndex = INDEX_PLAY2_SET2;
     //LocalIndex = INDEX_PLAY2_SET3;
 
-    LocalAddress = NodeAddresses[LocalIndex];
+    //LocalAddress = NodeAddresses[LocalIndex];
     //------------------------------------------
 
 
@@ -379,11 +379,23 @@ void AddressResolution(){
 	NInput* Addr3 = new NInput(ADDR3);
 	NInput* Addr4 = new NInput(ADDR4);
 
-	LocalAddress |= (Addr4->Level << 4);
-	LocalAddress |= (Addr3->Level << 3);
-	LocalAddress |= (Addr2->Level << 2);
-	LocalAddress |= (Addr1->Level << 1);
+	Addr0->Bias = inPullUp;
+	Addr1->Bias = inPullUp;
+	Addr2->Bias = inPullUp;
+	Addr3->Bias = inPullUp;
+	Addr4->Bias = inPullUp;
+
+	Addr0->Access = inImmediate;
+	Addr1->Access = inImmediate;
+	Addr2->Access = inImmediate;
+	Addr3->Access = inImmediate;
+	Addr4->Access = inImmediate;
+
 	LocalAddress |= (Addr0->Level << 0);
+	LocalAddress |= (Addr1->Level << 1);
+	LocalAddress |= (Addr2->Level << 2);
+	LocalAddress |= (Addr3->Level << 3);
+	LocalAddress |= (Addr4->Level << 4);
 
 	for(int i = 0; i < BUS_NODES; i++){
 		if(NodeAddresses[i] == LocalAddress){ LocalIndex = i;}
