@@ -94,20 +94,6 @@
 #define DELAY_SET2		((uint16_t) 1500)
 #define DELAY_SET3		((uint16_t) 2000)
 
-//------------------------------------------------------------------------------
-/*
-#define FLAG_STATUS_PLAY1_TENS		((uint16_t) 0x0001)
-#define FLAG_STATUS_PLAY1_UNITS		((uint16_t) 0x0002)
-#define FLAG_STATUS_PLAY1_SET1		((uint16_t) 0x0004)
-#define FLAG_STATUS_PLAY1_SET2		((uint16_t) 0x0008)
-#define FLAG_STATUS_PLAY1_SET3		((uint16_t) 0x0010)
-#define FLAG_STATUS_PLAY2_TENS		((uint16_t) 0x0020)
-#define FLAG_STATUS_PLAY2_UNITS		((uint16_t) 0x0040)
-#define FLAG_STATUS_PLAY2_SET1		((uint16_t) 0x0080)
-#define FLAG_STATUS_PLAY2_SET2		((uint16_t) 0x0100)
-#define FLAG_STATUS_PLAY2_SET3		((uint16_t) 0x0200)
-#define FLAG_STATUS_CALIBRATING		((uint16_t) 0x8000)
-*/
 
 #endif /* __APPLICATION_H */
 //==============================================================================

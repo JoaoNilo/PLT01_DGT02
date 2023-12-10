@@ -1,7 +1,7 @@
 //==============================================================================
 /**
  * @file Application.cpp
- * @title Digit Controller Module DGT-01 - Placar Tenis PLT-01
+ * @title Digit Controller Module DGT-02 - Placar Tenis PLT-01
  * @author Joao Nilo Rodrigues  -  nilo@pobox.com
  */
 //------------------------------------------------------------------------------
@@ -16,6 +16,8 @@
 //             improved Value and Arrow updates.
 //			   addressing code changed temporarily due to hardware bug. [V1.0.0-2]
 //
+// 2023-12-10: implemented 'connected' status by changing LED blinking pattern.
+//			   implemented Duty property in the NLed component. [V1.0.0-3]
 //------------------------------------------------------------------------------
 #include "Application.h"
 #include "FlipDisplay.h"
@@ -24,14 +26,11 @@
 // NOTE: product ID, firmware version and publishing date
 //------------------------------------------------------------------------------
 const uint32_t productID 			= 1;
-const uint8_t firmwareVersion[4] 	= {1,0,0,2};
-const uint8_t publishingDate[4]  	= {11,05,20,23};
+const uint8_t firmwareVersion[4] 	= {1,0,0,3};
+const uint8_t publishingDate[4]  	= {10,12,20,23};
 
 NLed* Led_Heartbeat;
 NTimer* Timer1;
-
-
-// Bus protocol components
 NSerial* BusPort;
 NTinyOutput* BusPort_DE;
 NTinyOutput* BusPort_RE;
@@ -74,9 +73,11 @@ NTinyOutput* Segment_H;
 #define PARAMS_HOURS			13
 uint8_t ScoreParams[SCORE_PARAMS_SIZE];
 
-#define PARAMS_FLAGS_SERV_MASK	((uint8_t) 0x03)
-#define PARAMS_FLAGS_SERV_PLAY1	((uint8_t) 0x01)
-#define PARAMS_FLAGS_SERV_PLAY2	((uint8_t) 0x02)
+#define PARAMS_FLAGS_SERV_MASK		((uint8_t) 0x03)
+#define PARAMS_FLAGS_SERV_PLAY1		((uint8_t) 0x01)
+#define PARAMS_FLAGS_SERV_PLAY2		((uint8_t) 0x02)
+#define PARAMS_FLAGS_CONNECTED		((uint8_t) 0x40)
+#define PARAMS_FLAGS_CALIBRATING	((uint8_t) 0x80)
 
 //------------------------------------------------------------------------------
 uint8_t DebugParams[2];
@@ -115,8 +116,6 @@ void busGetVersion_OnProcess(NDatagram*);
 void busGetStatus_OnProcess(NDatagram*);
 void busSetData_OnProcess(NDatagram*);
 void busSetServo_OnProcess(NDatagram*);
-
-//------------------------------------------------------------------------------
 void AddressResolution();
 
 //------------------------------------------------------------------------------
@@ -201,8 +200,8 @@ void ApplicationCreate(){
 
     //------------------------------------------
     AddressResolution();
-
     //------------------------------------------
+
 
     if((LocalAddress == PLAY1_TENS)||(LocalAddress == PLAY2_TENS)){
     	Segment_H  = new NTinyOutput(SEGMENT_H);
@@ -295,6 +294,15 @@ void busSetData_OnProcess(NDatagram* iDt){
 			if(ScoreParams[PARAMS_FLAGS] & PARAMS_FLAGS_SERV_PLAY2){ Digit->Arrow = true;}
 			else { Digit->Arrow = false;}
 		}
+
+		if(ScoreParams[PARAMS_FLAGS] & PARAMS_FLAGS_CONNECTED){
+			Led_Heartbeat->Interval = 2000;
+			Led_Heartbeat->Duty = 2; 				// %
+
+		} else {
+			Led_Heartbeat->Interval = 250;
+			Led_Heartbeat->Duty = 50; 				// %
+		}
 	}
 
 	iDt->SwapAddresses();
@@ -364,5 +372,5 @@ void AddressResolution(){
 	delete Addr4;
 }
 
-//==============================================================================
 
+//==============================================================================

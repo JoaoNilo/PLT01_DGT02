@@ -133,7 +133,7 @@ bool FlipDisplay::ProcessEvent(){
 	return(true);
 }
 
-
+//------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 void FlipDisplay::Notify(NMESSAGE* msg){
 
@@ -167,7 +167,7 @@ void FlipDisplay::RunStateMachine(){
     		next_state = fdServos_Start_Clear; // next state
     		break;
 
-		// start moving the vertical segments
+		// start moving the
 		case fdServos_Start_Clear:
 			seg_B = segment[Seg_B]; seg_F = segment[Seg_F];
 			segment[Seg_B] = PPM_SEG_CLEAR;

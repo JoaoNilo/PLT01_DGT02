@@ -1,5 +1,5 @@
 # Igonorar as pastas abaixo
-/.metadata/
+/.metadata
 /Application/Debug
 /Application/Docs
 /M3_Dependencies
