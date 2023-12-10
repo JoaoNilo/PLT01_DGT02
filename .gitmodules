@@ -1,18 +1,24 @@
 [submodule "M3_Dependencies"]
 	path = M3_Dependencies
 	url = git@github.com:JoaoNilo/M3_Dependencies.git
+	ignore = dirty
 [submodule "M3_Drivers"]
 	path = M3_Drivers
 	url = git@github.com:JoaoNilo/M3_Drivers.git
+	ignore = dirty
 [submodule "M3_Internals"]
 	path = M3_Internals
 	url = git@github.com:JoaoNilo/M3_Internals.git
+	ignore = dirty
 [submodule "M3_Kernel"]
 	path = M3_Kernel
 	url = git@github.com:JoaoNilo/M3_Kernel.git
+	ignore = dirty
 [submodule "M3_Peripherals"]
 	path = M3_Peripherals
 	url = git@github.com:JoaoNilo/M3_Peripherals.git
+	ignore = dirty
 [submodule "M3_Prosa"]
 	path = M3_Prosa
 	url = git@github.com:JoaoNilo/M3_Prosa.git
+	ignore = dirty
