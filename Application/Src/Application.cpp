@@ -122,8 +122,8 @@ void AddressResolution();
 void ApplicationCreate(){
 
  	Led_Heartbeat = new NLed(LED);
-	Led_Heartbeat->Interval = 250;
-	Led_Heartbeat->Status = ldBlinking;
+	Led_Heartbeat->Interval = 500;
+	//Led_Heartbeat->Status = ldBlinking;
 
     //--------------------------------------------------------------------------
     // Bus communication components
@@ -296,11 +296,11 @@ void busSetData_OnProcess(NDatagram* iDt){
 		}
 
 		if(ScoreParams[PARAMS_FLAGS] & PARAMS_FLAGS_CONNECTED){
-			Led_Heartbeat->Interval = 2000;
+			Led_Heartbeat->Interval = 3000;
 			Led_Heartbeat->Duty = 2; 				// %
 
 		} else {
-			Led_Heartbeat->Interval = 250;
+			Led_Heartbeat->Interval = 500;
 			Led_Heartbeat->Duty = 50; 				// %
 		}
 	}
