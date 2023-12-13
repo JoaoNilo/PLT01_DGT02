@@ -123,7 +123,7 @@ void ApplicationCreate(){
 
  	Led_Heartbeat = new NLed(LED);
 	Led_Heartbeat->Interval = 500;
-	//Led_Heartbeat->Status = ldBlinking;
+	Led_Heartbeat->Status = ldBlinking;
 
     //--------------------------------------------------------------------------
     // Bus communication components
